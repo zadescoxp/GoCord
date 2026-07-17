@@ -8,7 +8,9 @@ import (
 )
 
 type Config struct {
-	Port string
+	Port      string
+	DBURL     string
+	JWTSecret string
 }
 
 func LoadConfig() Config {
@@ -22,7 +24,19 @@ func LoadConfig() Config {
 		port = "8080"
 	}
 
+	dbURL := os.Getenv("DATABASE_URL")
+	if dbURL == "" {
+		log.Fatal("DATABASE_URL is not set in the environment variables")
+	}
+
+	jwtSecret := os.Getenv("JWT_SECRET")
+	if jwtSecret == "" {
+		log.Fatal("JWT_SECRET is not set in the environment variables")
+	}
+
 	return Config{
-		Port: port,
+		Port:      port,
+		DBURL:     dbURL,
+		JWTSecret: jwtSecret,
 	}
 }
